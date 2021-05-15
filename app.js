@@ -1,5 +1,6 @@
 const inquirer = require('inquirer');
 const cTable = require('console.table');
+const db = require('./db/connection');
 
 const employeeData = () => {
     console.log(" Employee Tracker ");
@@ -28,7 +29,10 @@ const employeeData = () => {
 }
 
 const showEmployees = () => {
-    
+    const sql = `SELECT employee.id,  employee.first_name, employee.last_name, role.title, role.salary
+    FROM employee      
+    LEFT JOIN role ON role.id = employee.id     
+    ;`;
 }
 
 const addEmployee = () => {

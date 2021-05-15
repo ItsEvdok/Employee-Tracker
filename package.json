@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/ItsEvdok/Employee-Tracker#readme",
   "dependencies": {
+    "console.table": "^0.10.0",
     "inquirer": "^8.0.0",
     "mysql2": "^2.2.5",
     "node": "^16.1.0"

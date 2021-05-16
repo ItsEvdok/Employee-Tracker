@@ -24,5 +24,3 @@ VALUES
     ('Post', 'Malone', 5, NULL),
     ('Kevin', 'Hart', 6, NULL),
     ('Trisha', 'Doe', 7, 6);
-
--- these better load up --

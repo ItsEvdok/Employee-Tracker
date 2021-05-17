@@ -82,13 +82,22 @@ const viewEmployees = () => {
 };
 
 const addDepartment = () => {
-  return inquirer.prompt([
-    {
-      type: "input",
-      name: "name",
-      message: "What is the new departments name?",
-    },
-  ]);
+  return inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "name",
+        message: "What is the new departments name?",
+      },
+    ])
+    .then((data) => {
+      const sql = `INSERT INTO department (department_name)
+                    VALUES (${data.name});`;
+      db.query(sql, (err, result) => {
+        console.table(result);
+        viewDepartments();
+      });
+    });
 };
 
 const addRole = () => {

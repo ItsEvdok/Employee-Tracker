@@ -18,6 +18,7 @@ const employeeData = () => {
           "Add a department",
           "Add a role",
           "Add an employee",
+          "Exit"
         ],
       },
     ])
@@ -34,6 +35,8 @@ const employeeData = () => {
         return addRole();
       } else if (response.selection === "Add an employee") {
         return addEmployee();
+      } else {
+          return exit();
       }
     });
 };
@@ -92,62 +95,110 @@ const addDepartment = () => {
     ])
     .then((data) => {
       const sql = `INSERT INTO department (department_name)
-                    VALUES (${data.name});`;
-      db.query(sql, (err, result) => {
-        console.table(result);
+                    VALUES (?);`;
+      const newDepartment = [data.name];
+      db.query(sql, newDepartment, (err, result) => {
         viewDepartments();
       });
     });
 };
 
 const addRole = () => {
-  return inquirer.prompt([
-    {
-      type: "input",
-      name: "name",
-      message: "What is the new roles name?",
-    },
-    {
-      type: "number",
-      name: "salary",
-      message: "What is the new roles salary?",
-    },
-    {
-      type: "list",
-      name: "department",
-      message: "What department does the new role belong to?",
-      choices: ["Sales", "Engineering", "Finance", "Legal"],
-    },
-  ]);
+  return inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "name",
+        message: "What is the new roles name?",
+      },
+      {
+        type: "number",
+        name: "salary",
+        message: "What is the new roles salary?",
+      },
+      {
+        type: "list",
+        name: "department",
+        message: "What department does the new role belong to?",
+        choices: ["Sales", "Engineering", "Finance", "Legal"],
+      },
+    ])
+    .then((data) => {
+      let department = 0;
+      if (data.department === "Sales") {
+        department = 1;
+      } else if (data.department === "Engineering") {
+        department = 2;
+      } else if (data.department === "Finance") {
+        department = 3;
+      } else {
+        department = 4;
+      }
+      const sql = `INSERT INTO role (title, salary, department_id)
+                  VALUES (?,?,?);`;
+      const newRole = [data.name, data.salary, department];
+      db.query(sql, newRole, (err, result) => {
+        viewRoles();
+      });
+    });
 };
 
 const addEmployee = () => {
-  return inquirer.prompt([
-    {
-      type: "input",
-      name: "first",
-      message: "What is the new employees first name?",
-    },
-    {
-      type: "input",
-      name: "last",
-      message: "What is the new employees last name?",
-    },
-    {
-      type: "list",
-      name: "role",
-      message: "What is the new employees role?",
-      choices: [
-        "Sales Lead",
-        "Salesperson",
-        "Lead Engineer",
-        "Software Engineer",
-        "Accountant",
-        "Legal Team Lead",
-        "Lawyer",
-      ],
-    },
-  ]);
+  return inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "first",
+        message: "What is the new employees first name?",
+      },
+      {
+        type: "input",
+        name: "last",
+        message: "What is the new employees last name?",
+      },
+      {
+        type: "list",
+        name: "roles",
+        message: "What is the new employees role?",
+        choices: [
+          "Sales Lead",
+          "Salesperson",
+          "Lead Engineer",
+          "Software Engineer",
+          "Accountant",
+          "Legal Team Lead",
+          "Lawyer",
+        ],
+      },
+    ])
+    .then((data) => {
+      let role = 0;
+      if (data.roles === "Sales Lead") {
+        role = 1;
+      } else if (data.roles === "Salesperson") {
+        role = 2;
+      } else if (data.roles === "Lead Engineer") {
+        role = 3;
+      } else if (data.roles === "Software Engineer") {
+        role = 4;
+      } else if (data.roles === "Accountant") {
+        role = 5;
+      } else if (data.roles === "Legal Team Lead") {
+        role = 6;
+      } else {
+        department = 7;
+      }
+      const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+                VALUES (?,?,?, ?);`;
+      const newEmployee = [data.first, data.last, role, 1];
+      db.query(sql, newEmployee, (err, result) => {
+        viewEmployees();
+      });
+    });
 };
+
+exit = () => {
+    console.log("Bye!");
+}
 
 employeeData();

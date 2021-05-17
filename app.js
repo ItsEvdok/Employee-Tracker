@@ -3,7 +3,7 @@ const cTable = require("console.table");
 const db = require("./db/connection");
 
 const employeeData = () => {
-  console.log(" Employee Tracker ");
+  console.log(" --|-- Employee Tracker --|-- ");
 
   return inquirer
     .prompt([
